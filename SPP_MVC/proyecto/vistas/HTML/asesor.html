@@ -1,0 +1,352 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+	<title>SPP-Asesor</title>
+	<link rel="stylesheet" href="../CSS/variables.css">
+	<link rel="stylesheet" href="../CSS/shell.css?v=1">
+	<link rel="stylesheet" href="../CSS/asesor.css?v=1">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+	<main class="app-shell">
+		<aside class="app-sidebar">
+			<div>
+				<header class="app-brand">
+					<div><h1>SPP</h1><p>Software de Prácticas<br>Pedagógicas</p><span aria-hidden="true"></span></div>
+					<button class="sidebar-toggle" id="sidebarToggle" aria-label="Alternar menú">
+						<i class="fa-solid fa-bars hamburger-icon"></i>
+						<i class="fa-solid fa-graduation-cap overlay-cap"></i>
+					</button>
+				</header>
+				<nav class="app-navigation" aria-label="Navegación principal">
+					  <a class="app-nav-link app-nav-link--active" href="#practica" aria-current="page"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Prácticas</span></a>
+					<a class="app-nav-link" href="#perfil"><i class="fa-solid fa-user" aria-hidden="true"></i><span>Perfil</span></a>
+				</nav>
+			</div>
+			<a class="app-logout" href="../index.html"><i class="fa-solid fa-door-open" aria-hidden="true"></i><span>Cerrar Sesión</span></a>
+		</aside>
+
+		<section class="app-content" id="practica">
+			<header class="app-topbar">
+				<button class="sidebar-toggle mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menú">
+					<i class="fa-solid fa-bars hamburger-icon"></i>
+					<i class="fa-solid fa-graduation-cap overlay-cap"></i>
+				</button>
+				<button class="topbar-icon" type="button" aria-label="Notificaciones"><i class="fa-regular fa-bell" aria-hidden="true"></i></button>
+				<button class="topbar-option theme-toggle-btn" type="button" aria-label="Cambiar tema"><i class="fa-regular fa-sun" aria-hidden="true"></i><span>Claro</span></button>
+				<button class="app-account" type="button" aria-label="Abrir menú de asesor"><i class="fa-solid fa-circle-user" aria-hidden="true"></i><span><strong>Nombre Asesor</strong><small>Asesor</small></span></button>
+			</header>
+
+			<div class="practice-content-wrapper">
+				<section class="practice-panel" aria-labelledby="practice-title">
+				<div class="practice-header">
+					<h2 id="practice-title">Información de Práctica</h2>
+					<div class="practice-status">
+						<span>Estado</span>
+						<div class="status-badge"></div>
+					</div>
+				</div>
+				<form class="practice-form" action="#" method="post">
+					<div class="practice-field"><label for="nombre-practica">Nombre Practica</label><input id="nombre-practica" name="nombre-practica" type="text" placeholder="....."></div>
+					<div class="practice-field"><label for="tutor">Tutor</label><input id="tutor" name="tutor" type="text" placeholder="....."></div>
+					<div class="practice-field"><label for="horas">Horas de la Practica</label><input id="horas" name="horas" type="number" placeholder="....."></div>
+					<div class="practice-field"><label for="institucion">Institución</label><input id="institucion" name="institucion" type="text" placeholder="....."></div>
+					<div class="practice-field"><label for="asesor">Asesor</label><input id="asesor" name="asesor" type="text" placeholder="....."></div>
+					<div class="practice-field"><label for="semestre">Semestre</label><input id="semestre" name="semestre" type="text" placeholder="....."></div>
+					<div class="practice-field practice-field--date"><label for="fecha-inicio">Fecha Inicio</label><div><input id="fecha-inicio" name="fecha-inicio" type="text" placeholder="....."><i class="fa-regular fa-calendar" aria-hidden="true"></i></div></div>
+					<div class="practice-field practice-field--date"><label for="fecha-final">Fecha Final</label><div><input id="fecha-final" name="fecha-final" type="text" placeholder="....."><i class="fa-regular fa-calendar" aria-hidden="true"></i></div></div>
+					<div class="practice-field"><label for="codigo">Código de la practica</label><input id="codigo" name="codigo" type="text" placeholder="....."></div>
+				</form>
+				<button class="practice-submit" type="button"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Entrar</span></button>
+				</section>
+				
+				<!-- PANEL DE BITÁCORA (Se muestra después de Entrar) -->
+				<section class="bitacora-panel" id="bitacora-panel" aria-labelledby="bitacora-title" style="display: none;">
+					<div class="bitacora-header">
+						<button type="button" class="bitacora-back-btn" id="bitacoraBack" aria-label="Volver a Información de Práctica">
+							<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+						</button>
+						<h2 id="bitacora-title" class="bitacora-title">Bitácora <span class="b-student-name" aria-label="Ver credencial del estudiante">- Estudiante de Prueba</span></h2>
+					</div>
+					<div class="bitacora-info-card">
+						<div class="bitacora-info-item">
+							<span class="b-info-label">Fecha de creación</span>
+							<span class="b-info-value">18/04/2026</span>
+						</div>
+						<div class="bitacora-info-item">
+							<span class="b-info-label">Nota Final</span>
+							<span class="b-info-value">Nota</span>
+						</div>
+						<div class="bitacora-info-item">
+							<span class="b-info-label">Observación General</span>
+							<span class="b-info-value">Observación</span>
+						</div>
+						<div class="bitacora-info-item">
+							<span class="b-info-label">Estado Bitácora</span>
+							<span class="b-info-value">Activa</span>
+						</div>
+					</div>
+
+					<div class="bitacora-action-card">
+						<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-regular fa-file-lines"></i></div>
+							<span class="b-action-label">Actividades</span>
+						</div>
+						<button type="button" class="b-action-btn" id="actividades-btn">Entrar</button>
+					</div>
+				</section>
+
+				<!-- PANEL DE ACTIVIDADES (Se muestra después de Entrar) -->
+				<section class="actividades-panel" id="actividades-panel" aria-labelledby="actividades-title" style="display: none;">
+					<div class="actividades-header">
+						<button type="button" class="actividades-back-btn" id="actividadesBack" aria-label="Volver a Información de la bitácora">
+							<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+						</button>
+						<h2 id="actividades-title" class="actividades-title">Actividades</h2>
+					</div>
+					<div class="bitacora-action-card">
+						<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #1</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="1">Entrar</button>
+					</div>
+
+					<div class="bitacora-action-card">
+					<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #2</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="2">Entrar</button>
+					</div>
+					<div class="bitacora-action-card">
+					<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #3</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="3">Entrar</button>
+					</div>
+					<div class="bitacora-action-card">
+					<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #4</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="4">Entrar</button>
+					</div>
+					<div class="bitacora-action-card">
+					<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #5</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="5">Entrar</button>
+					</div>
+					<div class="bitacora-action-card">
+					<div class="b-action-left">
+							<div class="stat-icon"><i class="fa-solid fa-file-lines"></i></div>
+							<span class="b-action-label">Actividad #6</span>
+						</div>
+						<button type="button" class="b-action-btn actividad-entrar-btn" data-actividad="6">Entrar</button>
+					</div>
+				</section>
+
+				<!-- PANEL DE EVIDENCIAS (Se muestra después de Entrar en Actividad) -->
+				<section class="evidencias-panel" id="evidencias-panel" aria-labelledby="evidencias-title" style="display: none;">
+					<div class="evidencias-header">
+						<button type="button" class="evidencias-back-btn" id="evidenciasBack" aria-label="Volver a Actividades">
+							<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+						</button>
+						<h2 id="evidencias-title" class="evidencias-title">Evidencias</h2>
+					</div>
+
+					<!-- Evidencia 1 -->
+					<div class="ev-card">
+						<div class="ev-card-body">
+							<p class="ev-card-title">Archivo: Operacion_consultas.txt</p>
+							<p class="ev-card-desc">Si le entregas al profesor el archivo de ejecutable .s...</p>
+						</div>
+						<div class="ev-menu-wrapper">
+							<button type="button" class="ev-menu-btn" aria-label="Opciones de evidencia" aria-expanded="false">
+								<i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+							</button>
+							<div class="ev-dropdown" role="menu">
+								<button type="button" class="ev-dropdown-item ev-item--ver" role="menuitem">
+									<i class="fa-solid fa-eye" aria-hidden="true"></i> Ver
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Evidencia 2 -->
+					<div class="ev-card">
+						<div class="ev-card-body">
+							<p class="ev-card-title">Archivo: Planificacion_clase.pdf</p>
+							<p class="ev-card-desc">Documento de planificación para la clase del día lune...</p>
+						</div>
+						<div class="ev-menu-wrapper">
+							<button type="button" class="ev-menu-btn" aria-label="Opciones de evidencia" aria-expanded="false">
+								<i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+							</button>
+							<div class="ev-dropdown" role="menu">
+								<button type="button" class="ev-dropdown-item ev-item--ver" role="menuitem">
+									<i class="fa-solid fa-eye" aria-hidden="true"></i> Ver
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- Evidencia 3 -->
+					<div class="ev-card">
+						<div class="ev-card-body">
+							<p class="ev-card-title">Archivo: Evaluacion_formativa.docx</p>
+							<p class="ev-card-desc">Instrumento de evaluación formativa aplicado durante...</p>
+						</div>
+						<div class="ev-menu-wrapper">
+							<button type="button" class="ev-menu-btn" aria-label="Opciones de evidencia" aria-expanded="false">
+								<i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+							</button>
+							<div class="ev-dropdown" role="menu">
+								<button type="button" class="ev-dropdown-item ev-item--ver" role="menuitem">
+									<i class="fa-solid fa-eye" aria-hidden="true"></i> Ver
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<!-- SECCIÓN DE RETROALIMENTACIONES -->
+					<div class="retro-section">
+						<h3 class="retro-title">Retroalimentaciones</h3>
+						
+						<div class="retro-card">
+							<div class="retro-card-body">
+								<div class="retro-header">
+									<span class="retro-role">Tutor</span>
+									<span class="retro-date">18/04/2026</span>
+								</div>
+								<p class="retro-content">"Aquí se verá la retroalimentación del docente"</p>
+							</div>
+							<div class="ev-menu-wrapper">
+								<button type="button" class="ev-menu-btn" aria-label="Opciones de retroalimentación" aria-expanded="false">
+									<i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+								</button>
+								<div class="ev-dropdown" role="menu">
+									<button type="button" class="ev-dropdown-item ev-item--ver" role="menuitem">
+										<i class="fa-solid fa-eye" aria-hidden="true"></i> Ver
+									</button>
+									<button type="button" class="ev-dropdown-item ev-item--editar" role="menuitem">
+										<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Editar
+									</button>
+									<button type="button" class="ev-dropdown-item ev-item--eliminar" role="menuitem">
+										<i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="retro-card">
+							<div class="retro-card-body">
+								<div class="retro-header">
+									<span class="retro-role">Asesor</span>
+									<span class="retro-date">18/04/2026</span>
+								</div>
+								<p class="retro-content">"Aquí se verá la retroalimentación del docente"</p>
+							</div>
+							<div class="ev-menu-wrapper">
+								<button type="button" class="ev-menu-btn" aria-label="Opciones de retroalimentación" aria-expanded="false">
+									<i class="fa-solid fa-ellipsis" aria-hidden="true"></i>
+								</button>
+								<div class="ev-dropdown" role="menu">
+									<button type="button" class="ev-dropdown-item ev-item--ver" role="menuitem">
+										<i class="fa-solid fa-eye" aria-hidden="true"></i> Ver
+									</button>
+									<button type="button" class="ev-dropdown-item ev-item--editar" role="menuitem">
+										<i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Editar
+									</button>
+									<button type="button" class="ev-dropdown-item ev-item--eliminar" role="menuitem">
+										<i class="fa-solid fa-trash" aria-hidden="true"></i> Eliminar
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<div class="retro-form-section">
+							<h4 class="retro-form-title">Añadir Comentario :</h4>
+							<div class="retro-input-wrapper">
+								<textarea class="retro-textarea" placeholder="Ingrese el texto..."></textarea>
+								<button type="button" class="retro-btn-submit" aria-label="Enviar Retroalimentación"><i class="fa-solid fa-paper-plane"></i></button>
+							</div>
+							<div class="retro-actions">
+								<button type="button" class="retro-btn-cancel"><i class="fa-solid fa-trash-can"></i> Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</section>		
+		
+		
+			</div>
+		</section>
+
+
+		<!-- TAB _ PERFIL-->
+		<section class="app-content" id="perfil" style="display: none;">
+			<header class="app-topbar">
+				<button class="sidebar-toggle mobile-menu-toggle" id="mobileMenuToggleProfile" aria-label="Abrir menú">
+					<i class="fa-solid fa-bars hamburger-icon"></i>
+					<i class="fa-solid fa-graduation-cap overlay-cap"></i>
+				</button>
+				<button class="topbar-icon" type="button" aria-label="Notificaciones"><i class="fa-regular fa-bell" aria-hidden="true"></i></button>
+				<button class="topbar-option theme-toggle-btn" type="button" aria-label="Cambiar tema"><i class="fa-regular fa-sun" aria-hidden="true"></i><span>Claro</span></button>
+				<button class="app-account" type="button" aria-label="Abrir menú de asesor"><i class="fa-solid fa-circle-user" aria-hidden="true"></i><span><strong>Nombre Asesor</strong><small>Asesor</small></span></button>
+			</header>
+
+			<div class="practice-content-wrapper">
+				<h2 class="profile-title" id="profile-title">Perfil</h2>
+				<section class="profile-panel" aria-labelledby="profile-title">
+					<div class="profile-layout">
+						<div class="profile-column">
+							<div class="profile-info-list">
+								<div class="profile-info-item">
+									<div class="profile-info-icon"><i class="fa-solid fa-id-badge"></i></div>
+									<div class="profile-info-text">
+										<span class="profile-info-label">Nombre Completo:</span>
+										<span class="profile-info-value">Nombre Asesor</span>
+									</div>
+								</div>
+								<div class="profile-info-item">
+									<div class="profile-info-icon"><i class="fa-solid fa-address-card"></i></div>
+									<div class="profile-info-text">
+										<span class="profile-info-label">Identificación:</span>
+										<span class="profile-info-value">Documento - Identificación</span>
+									</div>
+								</div>
+								<div class="profile-info-item">
+									<div class="profile-info-icon"><i class="fa-solid fa-envelope"></i></div>
+									<div class="profile-info-text">
+										<span class="profile-info-label">Correo:</span>
+										<span class="profile-info-value">Correo</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</section>
+	</main>
+	<!-- Modal: credencial del estudiante (bitácora) -->
+	<div id="b-modal-credencial" class="modal-overlay" style="display: none;">
+		<div class="gu-modal-card">
+			<div id="b-modal-credencial-body"></div>
+		</div>
+	</div>
+	<script src="../JavaScript/api.js"></script>
+	<script src="../JavaScript/sesion.js"></script>
+	<script src="../JavaScript/shell.js?v=1"></script>
+	<script src="../JavaScript/asesor.js?v=3"></script>
+	<script src="../JavaScript/docente.api.js"></script>
+</body>
+</html>

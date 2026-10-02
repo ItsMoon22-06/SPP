@@ -1,0 +1,238 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { min-height: 100vh; display: grid; place-items: center; padding: clamp(16px,3.5vw,50px) clamp(16px,4.2vw,60px); background: var(--clr-bg-page); color: #080808; font-family: var(--font-serif); }
+.sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+a, button, input, .role-card, .btn-visibility { font: inherit; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; outline: none; }
+a:focus, button:focus, .role-card:focus, .btn-visibility:focus { outline: none; }
+
+/* Quitar el fondo azul/amarillo por defecto del navegador en inputs autocompletados */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px transparent inset !important;
+    -webkit-text-fill-color: #173d2d !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.login-container { width:min(1320px,100%); min-height:800px; display:grid; grid-template-columns:51.25% 48.75%; overflow:hidden; border-radius:28px; background:#fdfbf8; box-shadow:0 6px 7px rgba(0,0,0,.25); }
+.login-hero { min-height:800px; padding:52px 50px; color:#fff; overflow:hidden; position:relative; background:linear-gradient(112deg,#287d5e 0%,#103122 67%,#102e20 100%); }
+.hero-header { display:flex;align-items:center;gap:24px; }.logo-box { width:73px;height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:2px solid #e5a728;border-radius:15px;color:#e5a728;font-family:var(--font-serif);font-weight:700; }.logo-box i {font-size:32px}.logo-box span {font-size:30px;line-height:.72}.hero-titles h1 {font-size:40px;line-height:1}.hero-titles p {margin-top:5px;font-size:19px;font-weight:700}.title-underline {display:block;width:84px;height:2px;margin-top:8px;background:#e5a728}
+.hero-illustration {height:610px;display:grid;place-items:center;position:relative}.hero-illustration::before {content:'';position:absolute;width:310px;height:310px;border-radius:50%;background:radial-gradient(circle,rgba(229,174,81,.13),transparent 68%);filter:blur(14px);animation:halo-breathe 5.5s ease-in-out infinite}.education-illustration {position:relative;z-index:1;width:455px;max-width:100%;height:auto;filter:drop-shadow(0 18px 20px rgba(0,0,0,.24));animation:education-float 5.5s ease-in-out infinite;will-change:transform}@keyframes education-float{0%,100%{transform:translateY(0) rotate(-1.2deg)}50%{transform:translateY(-15px) rotate(1.2deg)}}@keyframes halo-breathe{0%,100%{transform:scale(.9);opacity:.55}50%{transform:scale(1.12);opacity:1}}@media (prefers-reduced-motion:reduce){.education-illustration,.hero-illustration::before{animation:none}}
+.login-form-section {padding:54px 15px 36px 50px;background:#fdfbf8}.login-form {width:min(100%,580px)}.form-header {margin-bottom:28px;text-align:center}.form-title {color:#154733;font-size:43px;line-height:1.05}.form-title-underline {display:block;width:70px;height:3px;margin:10px auto 0;background:#dda326;border-radius:8px}.form-header p {margin-top:30px;font-size:19px;font-weight:700}
+.role-selection {border:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:22px}.role-option input {position:absolute;opacity:0}.role-card {min-height:90px;padding:15px;display:flex;align-items:center;gap:24px;border:2px solid #244b3b;border-radius:15px;background:#fff;box-shadow:0 5px 5px rgba(0,0,0,.25);cursor:pointer;font-size:26px;font-weight:700;line-height:1.12;transition:background 0.2s ease}.role-card i {width:46px;color:#154733;text-align:center;font-size:35px}.role-option input:checked + .role-card {background:#d1d1d1}
+.input-group {margin-bottom:22px}.input-group label {display:block;margin-bottom:8px;font-size:26px;font-weight:700}.input-wrapper {height:66px;display:flex;align-items:center;padding:0 18px;border:2px solid #244b3b;border-radius:15px;background:#fff;box-shadow:0 5px 5px rgba(0,0,0,.22)}.input-wrapper:focus-within {border-color:#d69b25}.icon-left,.btn-visibility {width:40px;color:#154733;font-size:28px;text-align:center}.input-wrapper input {min-width:0;flex:1;border:0;outline:0;padding:0 14px;background:transparent;font:700 21px var(--font-serif);color:#173d2d}.input-wrapper input::placeholder {color:#96969c;opacity:1}.btn-visibility {border:0;background:transparent;cursor:pointer}.password-group {margin-bottom:32px}.btn-submit {width:100%;height:62px;display:flex;flex-shrink:0;align-items:center;justify-content:center;gap:145px;padding:0 25px;color:#fff;border:2px solid #a64c2f;border-radius:15px;background:linear-gradient(90deg,#319a76,#0d3829 60%);box-shadow:0 2px 3px rgba(0,0,0,.2);font:700 26px var(--font-serif);cursor:pointer}.btn-submit i {color:#e4a329;font-size:30px}
+/* Portátiles compactos y tabletas horizontales */
+@media (max-width:1120px) {
+  .login-container { min-height:720px; }
+  .login-hero { min-height:720px; padding:42px 36px; }
+  .login-form-section { padding:48px 30px 30px; }
+  .hero-header { gap:16px; }.logo-box { width:62px;height:70px; }.logo-box i{font-size:27px}.logo-box span{font-size:25px}
+  .hero-titles h1 { font-size:36px; }.hero-titles p { font-size:16px; }
+  .hero-illustration { height:520px; }.education-illustration { width:390px; }
+  .form-title { font-size:38px; }.form-header p { font-size:17px; }
+  .role-card { min-height:82px; gap:12px; padding:12px; font-size:20px; }.role-card i { width:33px; font-size:27px; }
+  .input-group label { font-size:22px; }.input-wrapper input { font-size:17px; }.btn-submit { gap:70px; font-size:22px; }
+}
+
+/* Tabletas en vertical: paneles uno debajo del otro para evitar contenido comprimido */
+@media (max-width:900px) {
+  html, body { height:auto; overflow:auto; }
+  body { display:block; padding:12px; }
+  .login-container { min-height:0; grid-template-columns:1fr; border-radius:22px; }
+  .login-hero { min-height:450px; padding:36px clamp(26px,6vw,58px); }
+  .hero-illustration { height:420px; padding:16px; }.education-illustration { width:min(350px,100%); max-height:calc(100% - 24px); }
+  .login-form-section { padding:46px clamp(26px,7vw,70px); }
+  .login-form { max-width:620px; margin:0 auto; }
+}
+
+/* Teléfonos */
+@media (max-width:600px) {
+  .login-hero { min-height:470px; padding:28px 22px; }
+  .hero-header { align-items:flex-start; gap:13px; }.logo-box { width:54px;height:62px;border-radius:12px; }.logo-box i{font-size:23px}.logo-box span{font-size:22px}
+  .hero-titles h1 { font-size:31px; }.hero-titles p { font-size:14px; line-height:1.25; }.title-underline { width:62px; }
+  .hero-illustration { height:min(360px,92vw); padding:14px; }.education-illustration { width:min(310px,100%); max-height:calc(100% - 20px); }
+  .login-form-section { padding:34px 20px; }.form-header { margin-bottom:30px; }.form-title { font-size:34px; }.form-header p { margin-top:30px; font-size:16px; line-height:1.35; }
+  .role-selection { gap:12px; margin-bottom:24px; }.role-card { min-height:76px; padding:11px; font-size:18px; }.role-card i { font-size:24px; }
+  .input-group { margin-bottom:22px; }.input-group label { font-size:20px; }.input-wrapper { height:58px; padding:0 12px; }.icon-left,.btn-visibility { width:32px; font-size:22px; }.input-wrapper input { padding:0 8px; font-size:16px; }.password-group { margin-bottom:30px; }
+  .btn-submit { height:58px; gap:clamp(24px,10vw,55px); font-size:20px; }.btn-submit i { font-size:23px; }
+}
+
+/* Teléfonos estrechos: las tarjetas pasan a una sola columna */
+@media (max-width:430px) {
+  .login-hero { min-height:440px; }.hero-illustration { height:min(320px,94vw); }.education-illustration { width:min(280px,100%); }
+  .role-selection { grid-template-columns:1fr; }.role-card { min-height:68px; }.form-title { font-size:31px; }.form-header p { font-size:15px; }
+  .input-wrapper input { font-size:14px; }.btn-submit { font-size:18px; }
+}
+
+/*
+  ESCRITORIO: el body y el login ocupan únicamente el viewport visible.
+  El overflow se limita aquí para evitar la barra vertical en monitores y laptops.
+*/
+@media (min-width:901px) {
+  /* dvh usa el alto realmente visible del navegador, incluso con barras del sistema. */
+  html, body { height:100vh; height:100dvh; overflow:hidden; }
+  body { min-height:0; }
+  .login-container {
+    height:calc(100vh - clamp(32px, 7vw, 100px));
+    height:calc(100dvh - clamp(32px, 7vw, 100px));
+    min-height:0;
+    max-height:800px;
+  }
+  .login-hero, .login-form-section { min-height:0; }
+  .login-hero { display:flex; flex-direction:column; }
+  .hero-illustration { flex:1; min-height:0; height:auto; padding:18px; overflow:visible; }
+  .education-illustration { width:min(455px, 72%); max-width:100%; max-height:82%; height:auto; object-fit:contain; }
+  .login-form-section { display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
+}
+
+/*
+  LAPTOPS (<= 1200px): se reducen tipografías, alturas y espacios en proporción.
+  Al usar flex y gap, el formulario conserva la distribución sin superar 100vh.
+*/
+/* También se activa cuando el monitor es ancho, pero tiene poca altura útil. */
+@media (min-width:901px) and (max-width:1200px), (min-width:901px) and (max-height:900px) {
+  /* Debe descontar exactamente el mismo espacio vertical que usa body (padding × 2). */
+  .login-container { height:calc(100vh - clamp(32px, 7vw, 100px)); height:calc(100dvh - clamp(32px, 7vw, 100px)); max-height:none; }
+  .login-hero { padding:clamp(24px, 3vw, 38px); }
+  .login-form-section { padding:clamp(22px, 3vw, 38px) clamp(24px, 3vw, 38px); }
+  .hero-header { gap:clamp(12px, 1.5vw, 18px); }
+  .logo-box { width:58px; height:64px; border-radius:12px; }.logo-box i { font-size:25px; }.logo-box span { font-size:23px; }
+  .hero-titles h1 { font-size:clamp(29px, 3vw, 35px); }.hero-titles p { font-size:clamp(13px, 1.45vw, 16px); }
+  .hero-illustration::before { width:240px; height:240px; }.education-illustration { width:min(360px, 74%); max-height:76%; }
+  .form-header { margin-bottom:clamp(16px, 2.2vh, 25px); }.form-title { font-size:clamp(31px, 3.2vw, 37px); }.form-header p { margin-top:clamp(20px, 2.6vh, 28px); font-size:clamp(14px, 1.45vw, 16px); }
+  .role-selection { gap:12px; margin-bottom:clamp(16px, 2.2vh, 22px); }.role-card { min-height:clamp(66px, 8vh, 78px); padding:10px 12px; gap:10px; font-size:clamp(17px, 1.75vw, 20px); }.role-card i { width:30px; font-size:25px; }
+  .input-group { margin-bottom:clamp(14px, 2vh, 20px); }.input-group label { margin-bottom:5px; font-size:clamp(18px, 1.8vw, 21px); }.input-wrapper { height:clamp(50px, 6.5vh, 59px); padding:0 12px; }.icon-left,.btn-visibility { width:32px; font-size:22px; }.input-wrapper input { padding:0 8px; font-size:clamp(15px, 1.45vw, 17px); }.password-group { margin-bottom:clamp(20px, 2.8vh, 28px); }
+  .btn-submit { height:clamp(52px, 6.5vh, 60px); gap:clamp(38px, 8vw, 80px); font-size:clamp(19px, 2vw, 22px); }.btn-submit i { font-size:24px; }
+}
+
+/*
+  Alturas reducidas (por ejemplo, laptops con 768px de alto):
+  el formulario deja de centrarse verticalmente y cada control se compacta.
+  Así no se corta ni el título ni el botón de acceso.
+*/
+@media (min-width:901px) and (max-height:900px) {
+  .login-form-section { justify-content:center; padding:18px clamp(24px, 3vw, 38px); }
+  .form-header { margin-bottom:14px; }.form-title { font-size:32px; }.form-header p { margin-top:18px; font-size:15px; }
+  .role-selection { gap:10px; margin-bottom:14px; }.role-card { min-height:60px; padding:8px 10px; font-size:18px; }.role-card i { width:28px; font-size:23px; }
+  .input-group { margin-bottom:12px; }.input-group label { margin-bottom:4px; font-size:19px; }.input-wrapper { height:48px; }.input-wrapper input { font-size:16px; }.password-group { margin-bottom:18px; }
+  .btn-submit { height:50px; font-size:20px; }
+  .login-hero { padding:28px 34px; }.hero-illustration::before { width:220px; height:220px; }.education-illustration { width:min(330px, 70%); max-height:70%; }
+}
+
+/*
+  Laptop de 11 pulgadas y alturas similares: versión compacta sin desbordamiento,
+  fiel a las proporciones del diseño original (24 pulgadas).
+  NOTA: antes existían dos bloques @media (min-width:901px) and (max-height:800px)
+  distintos y con reglas que se pisaban entre sí (uno fijaba max-height:70% en la
+  imagen y el otro un height:min(280px,80%) fijo). Esa combinación era la causa de
+  que la imagen se viera con un tamaño/proporción distinta a la de pantallas grandes.
+  Se deja un único bloque, y en .education-illustration se usa solo width + max-height
+  (igual que en el resto de breakpoints), dejando que height:auto + object-fit:contain
+  (heredado del bloque de escritorio) mantenga la proporción real de la imagen.
+*/
+@media (min-width:901px) and (max-height:800px) {
+  .login-container { max-width:850px; width:90%; margin:0 auto; }
+
+  /* Panel izquierdo */
+  .login-hero { padding:30px; }
+  .logo-box { width:45px; height:50px; border-radius:8px; }.logo-box i { font-size:20px; }.logo-box span { font-size:18px; }
+  .hero-titles h1 { font-size:26px; }.hero-titles p { font-size:13px; }.title-underline { margin-top:5px; width:50px; }
+  .hero-illustration { padding:10px; }.education-illustration { width:min(280px, 80%); max-height:70%; }
+
+  /* Panel derecho */
+  .login-form-section { padding:30px; }
+  .form-header { margin-bottom:20px; }.form-title { font-size:28px; }.form-title-underline { margin-top:4px; height:3px; }.form-header p { margin-top:8px; font-size:13px; }
+
+  /* Tarjetas de selección de rol */
+  .role-selection { gap:10px; margin-bottom:20px; }
+  .role-card { min-height:50px; padding:10px; gap:10px; }
+  .role-card i { width:auto; font-size:18px; }.role-card span { font-size:13px; }
+
+  /* Inputs del formulario */
+  .input-group { margin-bottom:16px; }.input-group label { margin-bottom:5px; font-size:13px; }
+  .input-wrapper { height:45px; padding:0 12px; }.icon-left,.btn-visibility { font-size:16px; }.input-wrapper input { padding:0 10px; font-size:13px; }
+  .password-group { margin-bottom:20px; }
+
+  /* Botón */
+  .btn-submit { height:46px; gap:48px; padding:12px; font-size:14px; }.btn-submit i { font-size:21px; }
+}
+
+/* ── Splash / Intro screen ──
+   Solo aparece la primera vez que se entra por el link en esta sesión del
+   navegador (ver el script inline junto a #spp-splash en index.html, que
+   decide mostrarla o no usando sessionStorage). Si el usuario cierra sesión
+   y vuelve al login dentro de la misma pestaña, no se repite. */
+#spp-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--clr-bg-page);
+}
+#spp-splash.is-hidden { display: none; }
+
+#spp-splash .splash-halo {
+  position: absolute;
+  width: clamp(240px, 42vw, 440px);
+  height: clamp(240px, 42vw, 440px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(221,163,38,.22), transparent 70%);
+  filter: blur(18px);
+  animation: splash-halo-breathe 2.6s ease-in-out infinite;
+}
+#spp-splash img {
+  position: relative;
+  z-index: 1;
+  width: clamp(350px, 40vw, 750px);
+  height: auto;
+  display: block;
+  opacity: 0;
+  transform: translateY(14px) scale(.92);
+  filter: drop-shadow(0 14px 20px rgba(16,51,35,.18));
+  mix-blend-mode: multiply;
+  animation: splash-reveal .9s cubic-bezier(.22,1,.36,1) forwards;
+}
+#spp-splash .splash-bar {
+  position: absolute;
+  bottom: clamp(46px, 9vh, 84px);
+  z-index: 1;
+  width: 120px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(16,51,35,.12);
+  overflow: hidden;
+}
+#spp-splash .splash-bar span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--clr-accent-gold), var(--clr-primary-light));
+  animation: splash-progress 1.4s cubic-bezier(.4,0,.2,1) .15s forwards;
+}
+
+/* Salida: se desvanece suave, sin seguir "respirando" mientras desaparece */
+#spp-splash.splash-out { animation: splash-fade-out .55s ease forwards; }
+#spp-splash.splash-out .splash-halo,
+#spp-splash.splash-out img,
+#spp-splash.splash-out .splash-bar span { animation-play-state: paused; }
+
+@keyframes splash-reveal { to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes splash-halo-breathe {
+  0%, 100% { transform: scale(.92); opacity: .6; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+@keyframes splash-progress { to { width: 100%; } }
+@keyframes splash-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #spp-splash .splash-halo,
+  #spp-splash .splash-bar span { animation: none; }
+  #spp-splash img { opacity: 1; transform: none; animation: none; }
+  #spp-splash.splash-out { animation: splash-fade-out .3s ease forwards; }
+}
