@@ -1,0 +1,734 @@
+/* =========================================================================
+   shell.css — Carcasa compartida (sidebar, topbar, menú móvil).
+   La usan TODOS los paneles con sesión iniciada (estudiante, tutor, asesor,
+   director...). No pongas aquí nada específico de un panel: eso va en el
+   CSS propio de cada uno (estudiante.css, tutor.css, etc). Aquí solo va lo
+   que se ve y se comporta igual sin importar el rol: el sidebar, la barra
+   superior, el menú tipo drawer en móvil y el interruptor de tema.
+
+   Cada HTML de panel debe cargar, en este orden:
+     variables.css  → shell.css  → <panel>.css
+   ========================================================================= */
+
+:root {
+   --shell-bg: #fdfbf8;
+   --content-bg: #fdfbf8;
+   --panel-bg: #fff;
+   --text-primary: #000;
+   --text-secondary: #080808;
+   --text-muted: #555;
+   --text-label: #000;
+   --input-bg: #f4efeb;
+   --input-text: #163e2d;
+   --input-placeholder: #aaa;
+   --input-shadow: inset 0 1px 3px rgba(0, 0, 0, .05), 3px 4px 6px rgba(0, 0, 0, .08);
+   --topbar-icon: #090909;
+   --topbar-text: #000;
+   --theme-toggle-color: #000;
+   --theme-toggle-icon: #103323;
+}
+
+body.dark-theme {
+   --clr-bg-page: #080808;
+   --shell-bg: #0a0f0d;
+   --content-bg: #0a0f0d;
+   --panel-bg: #172c24;
+   --text-primary: #fff;
+   --text-secondary: #fff;
+   --text-muted: #dda326;
+   --text-label: #fff;
+   --input-bg: #4a4f4d;
+   --input-text: #fff;
+   --input-placeholder: #ccc;
+   --input-shadow: inset 0 1px 3px rgba(0, 0, 0, .3), 3px 4px 6px rgba(0, 0, 0, .3);
+   --topbar-icon: #dda326;
+   --topbar-text: #fff;
+   --theme-toggle-color: #fff;
+   --theme-toggle-icon: #dda326;
+}
+
+* {
+   box-sizing: border-box;
+   margin: 0;
+   padding: 0;
+}
+
+/* En escritorio: reservar siempre el espacio de la barra de scroll vertical para que
+   no haya salto de layout cuando el contenido cambia de altura (p.ej. durante la
+   animación del sidebar). scrollbar-gutter:stable cumple exactamente esa función. */
+html {
+   overflow-x: hidden;
+   scrollbar-width: none;
+   -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+   display: none;
+}
+
+body {
+   height: 100vh;
+   display: block;
+   margin: 0;
+   padding: 0;
+   background: var(--clr-bg-page);
+   color: var(--text-secondary);
+   font-family: var(--font-serif);
+   transition: background 0.3s ease;
+   overflow: hidden;
+}
+
+.sr-only {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   padding: 0;
+   margin: -1px;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border: 0;
+}
+
+button,
+input,
+a {
+   font: inherit;
+   -webkit-tap-highlight-color: transparent;
+   -webkit-touch-callout: none;
+   outline: none;
+}
+
+a:focus,
+button:focus {
+   outline: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+   outline: 2px solid var(--clr-accent-gold);
+   outline-offset: 2px;
+}
+
+/* Quitar el fondo azul/amarillo por defecto del navegador en inputs autocompletados.
+   Es genérico (cualquier <input> de cualquier panel), por eso vive aquí. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+   -webkit-box-shadow: 0 0 0 30px var(--input-bg) inset !important;
+   -webkit-text-fill-color: var(--input-text) !important;
+   transition: background-color 5000s ease-in-out 0s;
+}
+
+.app-shell {
+   width: 100%;
+   min-height: 100vh;
+   display: block;
+   background: var(--shell-bg);
+   transition: background 0.3s ease;
+   overflow-x: hidden;
+}
+
+.app-sidebar {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 280px;
+   height: 100vh;
+   overflow-y: auto;
+   overflow-x: hidden;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   padding: 52px 20px 30px;
+   color: #fff;
+   background: linear-gradient(112deg, #287d5e 0%, #103122 67%, #102e20 100%);
+   transition: width 0.3s ease, padding 0.3s ease;
+   z-index: 1000;
+   scrollbar-width: none;
+}
+
+.app-sidebar::-webkit-scrollbar {
+   display: none;
+}
+
+.app-brand {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   padding: 0 5px 36px;
+}
+
+.app-brand h1 {
+   font-size: 36px;
+   line-height: 1;
+}
+
+.app-brand p {
+   margin-top: 14px;
+   font-size: 16px;
+   font-weight: 700;
+   line-height: 1.35;
+}
+
+.app-brand span {
+   display: block;
+   width: 45px;
+   height: 2px;
+   margin-top: 8px;
+   background: var(--clr-accent-gold);
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle {
+   position: relative;
+   width: 48px;
+   height: 44px;
+   border: 2px solid var(--clr-accent-gold);
+   border-radius: 12px;
+   background: transparent;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   cursor: pointer;
+   color: #fff;
+   padding: 0;
+   flex-shrink: 0;
+}
+
+.sidebar-toggle .hamburger-icon {
+   font-size: 26px;
+}
+
+.sidebar-toggle .overlay-cap {
+   position: absolute;
+   top: -14px;
+   right: -10px;
+   color: var(--clr-accent-gold);
+   font-size: 26px;
+   background: #113222;
+   border-radius: 50%;
+   padding: 2px;
+}
+
+.app-navigation {
+   display: grid;
+   gap: 16px;
+}
+
+.app-nav-link,
+.app-logout {
+   display: flex;
+   align-items: center;
+   gap: 20px;
+   color: #fff;
+   text-decoration: none;
+   font-size: 21px;
+   font-weight: 700;
+   white-space: normal;
+   word-break: break-word;
+   overflow: visible;
+   flex-shrink: 0;
+}
+
+/* flex-shrink:0 evita que, en pantallas de poca altura (celular en horizontal),
+   flexbox encoja este enlace por debajo de lo que su texto necesita: por tener
+   "overflow: hidden", su tamaño mínimo automático pasa a ser 0 (regla del
+   estándar de Flexbox), así que sin "flex-shrink:0" el navegador lo aplasta y
+   el propio "overflow: hidden" recorta el texto ("Cerrar Sesión") a la mitad.
+   Con flex-shrink:0 el enlace conserva su alto real y, si no cabe todo, se
+   puede llegar a él con el scroll que ya tiene el menú (overflow-y: auto). */
+.app-nav-link {
+   min-height: 54px;
+   padding: 10px 16px;
+   border: 1px solid transparent;
+   border-radius: 12px;
+}
+
+.app-nav-link i {
+   width: 32px;
+   text-align: center;
+   font-size: 24px;
+   color: #fff;
+   flex-shrink: 0;
+}
+
+.app-nav-link--active {
+   border-color: var(--clr-accent-gold);
+   background: transparent;
+}
+
+.app-nav-link--active i,
+.app-nav-link--active span {
+   color: #fff;
+}
+
+.app-logout {
+   padding: 48px 16px 0;
+   border-top: 1px solid rgba(221, 163, 38, .9);
+   margin-top: auto;
+}
+
+.app-logout i {
+   font-size: 28px;
+   color: #fff;
+   flex-shrink: 0;
+}
+
+/* Collapsed Sidebar State (Desktop) */
+@media (min-width: 901px) {
+   .app-shell.sidebar-collapsed .app-sidebar {
+      width: 90px;
+      padding: 52px 10px 30px;
+      align-items: center;
+   }
+
+   .app-shell.sidebar-collapsed .app-brand h1,
+   .app-shell.sidebar-collapsed .app-brand p,
+   .app-shell.sidebar-collapsed .app-brand span {
+      display: none;
+   }
+
+   .app-shell.sidebar-collapsed .app-brand {
+      justify-content: center;
+      padding: 0 0 36px;
+   }
+
+   .app-shell.sidebar-collapsed .sidebar-toggle {
+      margin: 0 auto;
+   }
+
+   .app-shell.sidebar-collapsed .app-nav-link span,
+   .app-shell.sidebar-collapsed .app-logout span {
+      display: none;
+   }
+
+   .app-shell.sidebar-collapsed .app-nav-link {
+      justify-content: center;
+      padding: 10px;
+   }
+
+   .app-shell.sidebar-collapsed .app-nav-link i {
+      width: auto;
+   }
+
+   .app-shell.sidebar-collapsed .app-content {
+      margin-left: 90px;
+   }
+}
+
+.app-content {
+   margin-left: 280px;
+   height: 100vh;
+   position: relative;
+   min-width: 0;
+   display: flex;
+   flex-direction: column;
+   background: var(--content-bg);
+   transition: margin-left 0.3s ease, background 0.3s ease;
+}
+
+.app-topbar {
+   height: 85px;
+   position: sticky;
+   top: 0;
+   z-index: 900;
+   background: var(--content-bg);
+   display: flex;
+   align-items: center;
+   justify-content: flex-end;
+   padding: 0 40px;
+   border-bottom: 1px solid var(--clr-accent-gold);
+   flex-shrink: 0;
+   transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+/* Mobile Menu Toggle button (matching sidebar toggle style) */
+.mobile-menu-toggle {
+   display: none;
+   margin-right: auto;
+   color: var(--clr-primary-dark);
+}
+
+.mobile-menu-toggle .overlay-cap {
+   background: var(--content-bg);
+   transition: background 0.3s ease;
+}
+
+.topbar-icon,
+.topbar-option,
+.app-account {
+   display: flex;
+   align-items: center;
+   border: 0;
+   background: transparent;
+   cursor: pointer;
+   transition: color 0.3s ease;
+}
+
+.topbar-icon {
+   padding: 0 27px;
+   color: var(--topbar-icon);
+   font-size: 25px;
+}
+
+.topbar-option {
+   gap: 15px;
+   padding: 0 25px;
+   border-left: 1px solid var(--clr-accent-gold);
+   border-right: 1px solid var(--clr-accent-gold);
+   font-size: 20px;
+   font-weight: 700;
+   color: var(--theme-toggle-color);
+}
+
+.topbar-option i:first-child {
+   color: var(--theme-toggle-icon);
+   font-size: 25px;
+}
+
+.topbar-option i:last-child,
+.app-account>i:last-child {
+   font-size: 16px;
+   color: var(--topbar-text);
+}
+
+.app-account {
+   gap: 14px;
+   padding-left: 25px;
+   text-align: left;
+   color: var(--topbar-text);
+}
+
+.app-account>i:first-child {
+   color: var(--theme-toggle-icon);
+   font-size: 42px;
+}
+
+.app-account span {
+   display: grid;
+   line-height: 1.1;
+}
+
+.app-account strong {
+   font-size: 18px;
+   color: var(--text-primary);
+}
+
+.app-account small {
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--text-muted);
+}
+
+/* -------------------------------------------------------------------------
+   RESPONSIVE — solo lo que toca al sidebar/topbar/drawer.
+   Los mismos breakpoints existen también en el CSS de cada panel para su
+   propio contenido (practice-*, profile-*, etc); se repite la condición del
+   media query a propósito, cada archivo solo trae lo suyo.
+   ------------------------------------------------------------------------- */
+
+/* Laptops Compactos y Tabletas Horizontales (<= 1120px) */
+@media (max-width:1120px) and (min-height:801px) {
+   .app-sidebar {
+      width: 240px;
+      padding: 42px 18px 25px;
+   }
+
+   .app-content {
+      margin-left: 240px;
+   }
+
+   .app-brand h1 {
+      font-size: 32px;
+   }
+
+   .app-brand>i {
+      font-size: 30px;
+   }
+
+   .app-nav-link {
+      font-size: 19px;
+      min-height: 50px;
+   }
+
+   .app-topbar {
+      padding: 0 30px;
+      height: 75px;
+   }
+}
+
+/* Fallback for small height screens like 11-inch laptops (scaling down instead of scrolling).
+   Se excluyen alturas muy pequeñas (<=500px): esas ya no son un laptop compacto, son un
+   celular en horizontal, y deben usar el menú "drawer" de abajo, no este sidebar angosto fijo. */
+@media (min-width:901px) and (max-height:800px) and (min-height:501px) {
+   .app-sidebar {
+      width: 220px;
+      padding: 30px 15px;
+   }
+
+   .app-content {
+      margin-left: 220px;
+   }
+
+   .app-brand {
+      padding-bottom: 24px;
+   }
+
+   .app-brand h1 {
+      font-size: 28px;
+   }
+
+   .app-brand p {
+      font-size: 13px;
+      margin-top: 10px;
+   }
+
+   .app-brand span {
+      margin-top: 6px;
+   }
+
+   .app-nav-link,
+   .app-logout {
+      font-size: 17px;
+      gap: 14px;
+   }
+
+   .app-nav-link {
+      min-height: 44px;
+      padding: 6px 12px;
+      border-radius: 10px;
+   }
+
+   .app-nav-link i {
+      font-size: 20px;
+   }
+
+   .app-navigation {
+      margin-bottom: 16px;
+   }
+
+   .app-logout {
+      padding-top: 24px;
+   }
+
+   .app-logout i {
+      font-size: 24px;
+   }
+
+   .sidebar-toggle {
+      width: 38px;
+      height: 36px;
+      border-radius: 8px;
+   }
+
+   .sidebar-toggle .hamburger-icon {
+      font-size: 20px;
+   }
+
+   .sidebar-toggle .overlay-cap {
+      top: -10px;
+      right: -8px;
+      font-size: 20px;
+   }
+
+   .app-topbar {
+      height: 60px;
+      padding: 0 24px;
+   }
+
+   .topbar-option {
+      font-size: 16px;
+      gap: 10px;
+      padding: 0 16px;
+   }
+
+   .topbar-option i:first-child {
+      font-size: 20px;
+   }
+
+   .app-account {
+      padding-left: 16px;
+      gap: 10px;
+   }
+
+   .app-account>i:first-child {
+      font-size: 32px;
+   }
+
+   .app-account strong {
+      font-size: 15px;
+   }
+
+   .app-account small {
+      font-size: 12px;
+   }
+}
+
+/* Tabletas en vertical y drawer móvil.
+   También se activa por altura (max-height:500px) sin importar el ancho: un celular
+   grande en horizontal puede tener más de 900px de ancho, pero sigue siendo un celular
+   (poca altura, se usa con el dedo), así que debe seguir usando el menú tipo drawer y
+   no el sidebar fijo de escritorio. */
+@media (max-width:900px),
+(max-height:500px) {
+
+   /* El propio .app-shell pasa a ser el contenedor que hace scroll (como el
+     "app shell" de Classroom). Así html/body nunca se mueven, y la barra
+     superior (position: sticky, definida arriba) queda fija de verdad dentro
+     de .app-shell mientras el contenido de abajo se desplaza. */
+   html,
+   body {
+      height: 100%;
+      overflow: hidden;
+      padding: 0;
+   }
+
+   body {
+      display: block;
+   }
+
+   .app-shell {
+      height: 100vh;
+      height: 100dvh;
+      /* altura real visible en móvil, sin contar la barra del navegador */
+      /* Respaldo: en varios Android/Chrome, "dvh" se calcula mal en la primera
+         pintura (usa la altura "grande", como si la barra de direcciones no
+         existiera) y no se corrige hasta un resize. Eso deja contenido de más
+         abajo (el botón "Entrar") fuera de la pantalla sin poder alcanzarlo.
+         --app-vh la calcula JS con la altura real visible (shell.js) y se
+         actualiza en tiempo real, así que sobreescribe a dvh cuando está disponible. */
+      height: calc(var(--app-vh, 1vh) * 100);
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+      /* reserva el espacio de la barra de scroll siempre, para que no haya "salto" al mostrarla/ocultarla */
+      -webkit-overflow-scrolling: touch;
+      display: block;
+      border-radius: 0;
+      scrollbar-width: none;
+   }
+
+   .app-shell::-webkit-scrollbar {
+      display: none;
+   }
+
+   /* El bloqueo del scroll cuando el menú está abierto se hace por JS
+     (ver shell.js), no cambiando "overflow" aquí, para evitar el
+     reacomodo/"salto" que provoca quitar y poner la barra de scroll. */
+
+   /* El sidebar se convierte en un menú tipo "drawer" que se superpone al contenido.
+     Se oculta/muestra con "transform" (no con "left") porque animar "left" obliga
+     al navegador a recalcular el layout en cada fotograma — eso es lo que causaba
+     el salto y el destello de scroll horizontal al abrir/cerrar. "transform" solo
+     mueve la capa ya compuesta, sin recalcular nada. */
+   .app-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 100vh;
+      height: 100dvh;
+      height: calc(var(--app-vh, 1vh) * 100);
+      /* respaldo robusto, ver nota en .app-shell */
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      /* evita que el scroll del menú se pase al fondo */
+      -webkit-overflow-scrolling: touch;
+      z-index: 1000;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+      transform: translateX(-100%);
+      will-change: transform;
+      padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+   }
+
+   .app-shell.sidebar-open .app-sidebar {
+      transform: translateX(0);
+   }
+
+   .app-content {
+      margin-left: 0;
+   }
+
+   /* El menú se superpone (como en Classroom) en vez de empujar el contenido */
+   .app-shell.sidebar-open::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 15, 12, .55);
+      z-index: 999;
+      animation: menu-backdrop-fade .25s ease;
+   }
+
+   @keyframes menu-backdrop-fade {
+      from {
+         opacity: 0;
+      }
+
+      to {
+         opacity: 1;
+      }
+   }
+
+   .mobile-menu-toggle {
+      display: flex !important;
+   }
+
+   .app-content {
+      min-height: 0;
+      height: auto;
+      width: 100%;
+      display: block;
+      /* La topbar va fija arriba (no sticky): evita que desaparezca al escribir
+         en textareas largas o cuando el teclado mueve el visualViewport. */
+      padding-top: var(--app-topbar-offset, 85px);
+   }
+
+   .app-topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      padding: 0 20px;
+      justify-content: flex-end;
+      flex-shrink: 0;
+   }
+
+   .app-navigation {
+      margin-bottom: 16px;
+   }
+}
+
+/* Teléfonos */
+@media (max-width:600px) {
+   .app-topbar {
+      height: auto;
+      min-height: 52px;
+      flex-wrap: wrap;
+      padding: 10px;
+      align-content: flex-start;
+   }
+
+   .mobile-menu-toggle,
+   .topbar-icon,
+   .topbar-option {
+      flex-shrink: 0;
+   }
+
+   .topbar-option {
+      border: none;
+      padding: 0 12px;
+   }
+
+   .app-account {
+      padding-left: 10px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 10px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+   }
+}

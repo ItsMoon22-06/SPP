@@ -1,0 +1,61 @@
+process.env.DATABASE_URL_ESTUDIANTE='postgres://spp:spp@localhost/spp_est';
+process.env.DATABASE_URL_EVALUACION='postgres://spp:spp@localhost/spp_eva';
+process.env.DB_SSL='false';
+const root='' + require('path').join(__dirname,'..','..') + '/';
+const fs=require('fs'); const assert=require('assert');
+const PG=require(root+'modelado/config/PostgresConexion');
+const U=require(root+'modelado/dao/UsuarioDAO'), P=require(root+'modelado/dao/PracticaDAO'), A=require(root+'modelado/dao/ActividadDAO');
+const E=require(root+'modelado/dao/EvidenciaDAO'), R=require(root+'modelado/dao/RetroalimentacionDAO'), I=require(root+'modelado/dao/InstitucionDAO');
+const T=require(root+'modelado/dao/TipoPracticaDAO'), Q=require(root+'modelado/dao/PreguntaDAO'), S=require(root+'modelado/dao/RespuestaDAO'), N=require(root+'modelado/dao/IndicadorDAO');
+(async()=>{
+  for (const b of ['practica','evaluacion']) await PG.pool(b).query('DROP SCHEMA public CASCADE; CREATE SCHEMA public'); // base de prueba limpia
+  await PG.pool('practica').query(fs.readFileSync(root+'modelado/sql/schema_practica.sql','utf8'));
+  await PG.pool('evaluacion').query(fs.readFileSync(root+'modelado/sql/schema_evaluacion.sql','utf8'));
+  await PG.pool('practica').query(fs.readFileSync(root+'modelado/sql/schema_practica.sql','utf8')); // idempotente
+  console.log('esquemas OK (y re-aplicables)');
+  const u=new U(), p=new P(), a=new A(), e=new E(), r=new R(), i=new I(), t=new T(), q=new Q(), s=new S(), n=new N();
+  const base={tipo:'CC',apellidos:'Prueba',estado:'activo'};
+  const uid=()=>require('crypto').randomUUID();
+  await u.crear('estudiante',{numDocumento:'111111',docTipo:'CC',nombres:'Edwin',apellidos:'Pruebas',correo:'e@x.co',programa:'Lic. Sistemas',estado:'activo',supabaseUid:uid()});
+  await u.crear('tutor',{numDocumento:'222222',docTipo:'CC',nombres:'Ramiro',apellidos:'Urtado',correo:'t@x.co',programa:'Facultad',estado:'activo',supabaseUid:uid()});
+  await u.crear('asesor',{numDocumento:'333333',docTipo:'CC',nombres:'Claudia',apellidos:'Rueda',correo:'a@x.co',programa:'Normal',estado:'activo',supabaseUid:uid()});
+  await u.crear('director',{numDocumento:'444444',docTipo:'CC',nombres:'Val',apellidos:'Ortiz',correo:'d@x.co',programa:'Dirección',estado:'activo',supabaseUid:uid()});
+  const lista=await u.listar(); assert.equal(lista.length,4);
+  assert.equal((await u.buscarPorCorreo('E@X.CO')).rol,'estudiante');
+  const fe=await u.buscarPorDocumento('111111'); assert.equal(fe.programa,'Lic. Sistemas');
+  assert.equal((await u.buscarPorUid(fe.supabase_uid)).numdocumento,'111111');
+  await u.actualizar('estudiante','111111',{docTipo:'CC',nombres:'Edwin2',apellidos:'Pruebas',programa:'Otro prog',estado:'activo'});
+  assert.equal((await u.buscarPorDocumento('111111')).programa,'Otro prog');
+  await u.cambiarEstado('tutor','222222','inactivo'); assert.equal((await u.buscarPorDocumento('222222')).estado,'inactivo'); await u.cambiarEstado('tutor','222222','activo');
+  assert.equal((await u.listar({q:'ramiro'})).length,1); assert.equal((await u.listar({rol:'asesor'})).length,1);
+  await u.registrarAcceso('director','444444');
+  console.log('UsuarioDAO OK');
+  const inst=await i.crear({nit:'900-1',nombre:'Colegio X',encargado:'Ana',direccion:'Calle 1',correo:'c@x.co'});
+  const tipo=await t.crear({nombre:'Observación',semestre:3,horas:120}); assert.match(tipo.codigo,/^GTP-001$/);
+  const id=await p.crear({nombre:'Práctica 1',idTipo:tipo.idtipo,idInstitucion:inst.idinstitucion,docEstudiante:'111111',docTutor:'222222',docAsesor:'333333',fechaInicio:'2026-02-01',fechaFin:'2026-06-01'},6);
+  const det=await p.obtener(id); assert.equal(det.estudiante,'Edwin2 Pruebas'); assert.equal(det.fechainicio,'2026-02-01'); assert.equal(det.horas,120);
+  console.log('PracticaDAO.crear/obtener OK ->',det.codigo);
+  assert.equal((await p.listar({docTutor:'222222'})).length,1); assert.equal((await p.listar({docTutor:'999'})).length,0);
+  const acts=await a.listarPorPractica(id); assert.equal(acts.length,6);
+  await e.crear({idEvidencia:'EV-1',urlArchivo:'https://x/y.pdf',nombreArchivo:'y.pdf',descripcion:'d',idActividad:acts[0].idactividad,publicId:'pid',resourceType:'raw'});
+  assert.equal((await e.listarPorActividad(acts[0].idactividad)).length,1); assert.equal((await e.obtener('EV-1')).idpractica,id);
+  await e.actualizarDescripcion('EV-1','nueva'); await e.eliminar('EV-1');
+  const rt=await r.crear({idActividad:acts[0].idactividad,docAutor:'222222',rolAutor:'tutor',texto:'Bien'}); assert.ok(rt.idretro);
+  assert.equal((await r.listarPorActividad(acts[0].idactividad)).length,1);
+  await p.actualizarBitacora(id,{notaFinal:4.5,observacionGeneral:'ok',estadoBitacora:null}); assert.equal(Number((await p.obtener(id)).notafinal),4.5);
+  console.log('Actividad/Evidencia/Retro/Bitácora OK');
+  const pr=await q.crear({enunciado:'¿Qué es inclusión?',tema:'pedagogia',tipoPractica:'observacion',tipoPregunta:'abierta',valor:2,docAutor:'222222'}); assert.equal(pr.codigo,'PRG-001');
+  assert.equal((await q.listar({tema:'pedagogia',q:'inclus'})).length,1);
+  const asg=await s.asignarPregunta(id,pr.idpregunta); await s.asignarPregunta(id,pr.idpregunta); // idempotente
+  let lr=await s.listarPorPractica(id); assert.equal(lr.length,1);
+  await s.guardar(asg.idrespuesta,'mi respuesta','respondida'); await s.crearRetro(asg.idrespuesta,'222222','Excelente');
+  lr=await s.listarPorPractica(id); assert.equal(lr[0].observacion,'Excelente'); assert.equal((await s.obtener(asg.idrespuesta)).idpractica,id);
+  console.log('Pregunta/Respuesta OK');
+  const calc=await n.calcular(2026); assert.ok(calc.length>=1); console.log('Indicador calculado:',JSON.stringify(calc[0]).slice(0,230));
+  console.log('Resumen:',JSON.stringify(await n.resumenGeneral()));
+  // restricciones
+  await assert.rejects(()=>p.crear({nombre:'x',idTipo:tipo.idtipo,idInstitucion:inst.idinstitucion,docEstudiante:'111111',fechaInicio:'2026-06-01',fechaFin:'2026-01-01'}),/check|chk|violates/i);
+  await assert.rejects(()=>u.eliminar('estudiante','111111'),/foreign key|violates/i);
+  console.log('Restricciones OK (fechas, FK)');
+  await PG.cerrar();
+})().catch(e=>{console.error('FALLO:',e.message);process.exit(1)});

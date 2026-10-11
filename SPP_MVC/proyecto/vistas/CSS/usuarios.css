@@ -1,0 +1,1984 @@
+/* =========================================================================
+   usuarios.css — Módulo "Gestionar Usuarios" del panel de Director.
+   Reutiliza a propósito piezas que ya existen en director.css
+   (.cp-card, .cp-btn, .informes-tabs, .stat-card, .modal-overlay) para que
+   el módulo herede colorimetría y modo oscuro sin duplicar reglas.
+
+   Orden de carga en director.html:
+     variables.css → shell.css → director.css → usuarios.css
+   ========================================================================= */
+
+#gestionar-usuarios {
+   --gu-green-dark: #103322;
+   --gu-green: #1a6b50;
+   --gu-green-soft: #e3efe5;
+   --gu-line: rgba(16, 51, 35, .12);
+   --gu-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+/* ---------- Encabezado del módulo ---------- */
+.gu-header {
+   margin-bottom: 22px;
+}
+
+.gu-header h2 {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   flex-wrap: wrap;
+   margin-bottom: 4px;
+   font-family: var(--font-serif);
+   font-size: 28px;
+   font-weight: 700;
+   color: var(--text-primary);
+}
+
+.gu-header p {
+   font-family: var(--font-serif);
+   font-size: 16px;
+   color: var(--text-primary);
+}
+
+.gu-count-pill {
+   padding: 5px 14px;
+   border-radius: 999px;
+   background: var(--gu-green-soft);
+   color: #1a4231;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 700;
+}
+
+.gu-tabs {
+   margin-bottom: 30px;
+   display: flex;
+   justify-content: center;
+}
+
+.gu-panel {
+   display: flex;
+   flex-direction: column;
+   gap: 24px;
+}
+
+/* =========================================================================
+   REGISTRO PASO A PASO
+   ========================================================================= */
+
+.gu-wizard-layout {
+   display: grid;
+   grid-template-columns: minmax(0, 1fr) 360px;
+   gap: 30px;
+   align-items: start;
+}
+
+.gu-wizard-main {
+   min-width: 0;
+}
+
+/* --- Indicador de pasos --- */
+.gu-steps {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   margin: 0 0 24px;
+   padding: 0;
+   list-style: none;
+}
+
+.gu-step-item {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   min-width: 0;
+}
+
+.gu-step-dot {
+   display: grid;
+   place-items: center;
+   width: 40px;
+   height: 40px;
+   flex-shrink: 0;
+   border: 2px solid #c2d8cc;
+   border-radius: 50%;
+   background: #fff;
+   color: #6b8f7e;
+   font-family: var(--font-serif);
+   font-size: 17px;
+   font-weight: 700;
+   transition: background .25s ease, border-color .25s ease, color .25s ease;
+}
+
+.gu-step-text {
+   display: flex;
+   flex-direction: column;
+   line-height: 1.2;
+   min-width: 0;
+}
+
+.gu-step-text small {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 11px;
+   font-weight: 600;
+   color: var(--text-muted);
+}
+
+.gu-step-text strong {
+   font-family: var(--font-serif);
+   font-size: 15px;
+   color: var(--text-primary);
+   white-space: nowrap;
+}
+
+.gu-step-item.is-current .gu-step-dot {
+   border-color: var(--gu-green-dark);
+   background: linear-gradient(135deg, #288360, #103322);
+   color: #fff;
+}
+
+.gu-step-item.is-done .gu-step-dot {
+   border-color: var(--clr-accent-gold);
+   background: var(--clr-accent-gold);
+   color: #103322;
+}
+
+.gu-step-bar {
+   flex: 1;
+   height: 3px;
+   min-width: 16px;
+   border-radius: 3px;
+   background: #c2d8cc;
+}
+
+.gu-step-bar.is-done {
+   background: var(--clr-accent-gold);
+}
+
+/* --- Tarjetas de cada paso --- */
+.gu-step-panel {
+   display: none;
+}
+
+.gu-step-panel.is-active {
+   display: flex;
+   overflow: visible;
+}
+
+#gestionar-usuarios .gu-toolbar,
+#gestionar-usuarios .gu-wizard-main {
+   overflow: visible;
+}
+
+.gu-step-head {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   gap: 16px;
+   padding-bottom: 14px;
+   border-bottom: 1px solid var(--gu-line);
+}
+
+.gu-step-head h3 {
+   font-family: var(--font-serif);
+   font-size: 20px;
+   font-weight: 700;
+   color: var(--text-primary);
+   margin-bottom: 2px;
+}
+
+.gu-step-head p {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   color: var(--text-muted);
+   max-width: 58ch;
+}
+
+.gu-tag {
+   flex-shrink: 0;
+   padding: 5px 12px;
+   border-radius: 999px;
+   background: var(--gu-green-soft);
+   color: #1a4231;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 11px;
+   font-weight: 700;
+}
+
+/* --- Campos --- */
+.gu-grid {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 18px;
+}
+
+.gu-field {
+   display: flex;
+   flex-direction: column;
+   gap: 7px;
+   min-width: 0;
+}
+
+.gu-field--full {
+   grid-column: 1 / -1;
+}
+
+.gu-field label {
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   color: var(--text-primary);
+}
+
+.gu-control {
+   position: relative;
+   display: flex;
+   align-items: center;
+   height: 50px;
+   padding: 0 16px;
+   border: 1px solid rgba(0, 0, 0, .05);
+   border-radius: 14px;
+   background: #D1E5DE;
+   transition: box-shadow .25s ease;
+}
+
+.gu-control:focus-within {
+   box-shadow: 0 0 0 2px #1a4231;
+}
+
+.gu-control>i {
+   flex-shrink: 0;
+   width: 22px;
+   color: #1a4231;
+   font-size: 15px;
+}
+
+.gu-control input,
+.gu-control select {
+   flex: 1;
+   width: 100%;
+   min-width: 0;
+   border: 0;
+   outline: 0;
+   background: transparent;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 600;
+   color: #1a4231;
+}
+
+.gu-control input::placeholder {
+   color: #1a4231;
+   opacity: .55;
+   font-weight: 400;
+}
+
+.gu-control select {
+   appearance: none;
+   cursor: pointer;
+   padding-right: 22px;
+}
+
+.gu-control .gu-chevron {
+   position: absolute;
+   right: 16px;
+   pointer-events: none;
+   color: #1a4231;
+   font-size: 13px;
+}
+
+.gu-control--locked {
+   background: #e7eeea;
+}
+
+.gu-control--locked input {
+   color: #4a6156;
+   cursor: not-allowed;
+}
+
+.gu-control--mono input {
+   font-family: var(--gu-mono);
+   font-size: 14px;
+   letter-spacing: .03em;
+}
+
+.gu-suffix {
+   flex-shrink: 0;
+   padding-left: 10px;
+   margin-left: 10px;
+   border-left: 1px solid rgba(26, 66, 49, .25);
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   font-weight: 600;
+   color: #1a4231;
+   white-space: nowrap;
+}
+
+.gu-hint {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   color: var(--text-muted);
+}
+
+.gu-hint i {
+   color: var(--gu-green);
+}
+
+.gu-error {
+   display: none;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 600;
+   color: #b93232;
+}
+
+.gu-field.has-error .gu-control,
+.gu-field.has-error .cp-input-wrap {
+   box-shadow: 0 0 0 2px #b93232;
+}
+
+.gu-field.has-error .gu-error {
+   display: block;
+}
+
+.gu-icon-btn {
+   flex-shrink: 0;
+   border: 0;
+   background: transparent;
+   color: #1a4231;
+   font-size: 16px;
+   cursor: pointer;
+   padding: 4px;
+   line-height: 1;
+}
+
+/* --- Selector visual de rol --- */
+.gu-roles {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 14px;
+}
+
+.gu-role {
+   cursor: pointer;
+}
+
+.gu-role input {
+   position: absolute;
+   opacity: 0;
+   pointer-events: none;
+}
+
+.gu-role-box {
+   display: flex;
+   align-items: flex-start;
+   gap: 14px;
+   height: 100%;
+   padding: 16px;
+   border: 2px solid transparent;
+   border-radius: 14px;
+   background: #f1f6f3;
+   transition: border-color .2s ease, background .2s ease; -webkit-tap-highlight-color: transparent;
+}
+
+.gu-role-box i {
+   display: grid;
+   place-items: center;
+   width: 42px;
+   height: 42px;
+   flex-shrink: 0;
+   border-radius: 12px;
+   background: #b3cbbc;
+   color: #1a4231;
+   font-size: 18px;
+}
+
+.gu-role-box strong {
+   display: block;
+   font-family: var(--font-serif);
+   font-size: 16px;
+   color: var(--text-primary);
+}
+
+.gu-role-box>span {
+   min-width: 0;
+}
+
+.gu-role-box strong+span {
+   display: block;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12.5px;
+   line-height: 1.35;
+   color: var(--text-muted);
+}
+
+.gu-role input:checked+.gu-role-box {
+   border-color: var(--gu-green-dark);
+   background: var(--gu-green-soft);
+}
+
+.gu-role input:focus-visible+.gu-role-box {
+   outline: 2px solid var(--clr-accent-gold);
+   outline-offset: 2px;
+}
+
+/* --- Estado de la cuenta --- */
+.gu-status-row {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 18px;
+   flex-wrap: wrap;
+   padding: 16px 18px;
+   border-radius: 14px;
+   background: #f1f6f3;
+}
+
+.gu-status-copy strong {
+   display: block;
+   font-family: var(--font-serif);
+   font-size: 16px;
+   color: var(--text-primary);
+}
+
+.gu-status-copy span {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12.5px;
+   color: var(--text-muted);
+}
+
+.gu-switch {
+   display: flex;
+   gap: 4px;
+   padding: 4px;
+   border-radius: 12px;
+   background: #dfe9e4;
+}
+
+.gu-switch button {
+   padding: 8px 16px;
+   border: 0;
+   border-radius: 9px;
+   background: transparent;
+   color: #4a6156;
+   font-family: var(--font-serif);
+   font-size: 14px;
+   font-weight: 700;
+   cursor: pointer;
+   transition: background .2s ease, color .2s ease;
+}
+
+.gu-switch button.is-on {
+   background: #fff;
+   color: var(--gu-green);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+}
+
+/* --- Fuerza de la contraseña --- */
+.gu-strength {
+   display: flex;
+   flex-direction: column;
+   gap: 7px;
+}
+
+.gu-strength-top {
+   display: flex;
+   justify-content: space-between;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   color: var(--text-muted);
+}
+
+.gu-strength-top b {
+   color: var(--gu-green);
+}
+
+.gu-strength-bars {
+   display: flex;
+   gap: 6px;
+}
+
+.gu-strength-bars span {
+   flex: 1;
+   height: 6px;
+   border-radius: 999px;
+   background: #dfe9e4;
+   transition: background .25s ease;
+}
+
+.gu-check {
+   display: flex;
+   align-items: flex-start;
+   gap: 12px;
+   cursor: pointer;
+}
+
+.gu-check input {
+   width: 18px;
+   height: 18px;
+   margin-top: 2px;
+   accent-color: #1a4231;
+   cursor: pointer;
+}
+
+.gu-check strong {
+   display: block;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   color: var(--text-primary);
+}
+
+.gu-check strong+span {
+   display: block;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12.5px;
+   line-height: 1.35;
+   color: var(--text-muted);
+}
+
+/* --- Paso 4: resumen --- */
+.gu-summary {
+   display: grid;
+   grid-template-columns: repeat(2, minmax(0, 1fr));
+   gap: 12px;
+}
+
+.gu-summary div {
+   padding: 14px 16px;
+   border-radius: 12px;
+   background: #f1f6f3;
+}
+
+.gu-summary dt {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 11.5px;
+   font-weight: 700;
+   color: var(--text-muted);
+   margin-bottom: 3px;
+}
+
+.gu-summary dd {
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 600;
+   color: var(--text-primary);
+   word-break: break-word;
+}
+
+/* --- Botonera del asistente --- */
+.gu-wizard-actions {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+   margin-top: 24px;
+}
+
+.gu-wizard-actions .gu-progress-text {
+   margin-right: auto;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   color: var(--text-muted);
+}
+
+/* .cp-btn viene de director.css; aquí solo se alinea el icono con el texto. */
+#gestionar-usuarios .cp-btn {
+   display: inline-flex;
+   align-items: center;
+   justify-content: center;
+   gap: 10px;
+}
+
+/* =========================================================================
+   TARJETA DE CREDENCIAL (vista previa en vivo / detalle)
+   ========================================================================= */
+
+.gu-preview {
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   position: sticky;
+   top: 0;
+}
+
+.gu-cred {
+   border-radius: 26px;
+   background: #fff;
+   box-shadow: 0 12px 30px rgba(16, 51, 35, .14);
+   overflow: hidden;
+}
+
+.gu-cred-top {
+   display: flex;
+   align-items: flex-start;
+   justify-content: space-between;
+   gap: 14px;
+   padding: 22px 22px 44px;
+   color: #fff;
+   background: linear-gradient(118deg, #2b8563 0%, #123a27 68%, #102e20 100%);
+}
+
+.gu-cred-brand {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+}
+
+.gu-cred-brand>i {
+   margin-top: 2px;
+   font-size: 19px;
+   color: #bfe3d2;
+}
+
+.gu-cred-brand p {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 14px;
+   font-weight: 700;
+   letter-spacing: .05em;
+   line-height: 1.22;
+   text-transform: uppercase;
+}
+
+.gu-cred-brand em {
+   font-style: normal;
+   font-weight: 500;
+   color: #a8d3bf;
+}
+
+.gu-cred-state {
+   flex-shrink: 0;
+   padding: 7px 16px;
+   border-radius: 999px;
+   background: rgba(255, 255, 255, .22);
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 800;
+   letter-spacing: .07em;
+}
+
+.gu-cred-state--pendiente {
+   background: var(--clr-accent-gold);
+   color: #3a2a04;
+}
+
+.gu-cred-state--inactivo {
+   background: rgba(255, 255, 255, .35);
+   color: #17322a;
+}
+
+.gu-cred-cta {
+   position: relative;
+   z-index: 2;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 12px;
+   margin: -28px auto 0;
+   padding: 13px 28px;
+   border: 5px solid #fff;
+   border-radius: 18px;
+   background: linear-gradient(95deg, #2a7f5f, #17523c);
+   color: #fff;
+   font-family: var(--font-serif);
+   font-size: 17px;
+   font-weight: 700;
+   cursor: pointer;
+   box-shadow: 0 6px 14px rgba(16, 51, 35, .22);
+   transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.gu-cred-cta:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 10px 18px rgba(16, 51, 35, .26);
+}
+
+.gu-cred-cta:active {
+   transform: translateY(0);
+}
+
+.gu-cred-body {
+   padding: 18px 22px 24px;
+   text-align: center;
+}
+
+.gu-cred-name {
+   font-family: var(--font-serif);
+   font-size: 23px;
+   font-weight: 700;
+   line-height: 1.2;
+   color: #17523c;
+   word-break: break-word;
+}
+
+.gu-cred-doc {
+   margin-top: 6px;
+   font-family: var(--gu-mono);
+   font-size: 14px;
+   letter-spacing: .04em;
+   color: #33453c;
+}
+
+.gu-cred-role {
+   display: inline-flex;
+   align-items: center;
+   gap: 9px;
+   margin: 16px 0 18px;
+   padding: 9px 20px;
+   border-radius: 999px;
+   background: #dff0e7;
+   color: var(--gu-green);
+   font-family: var(--font-serif);
+   font-size: 16px;
+   font-weight: 700;
+}
+
+.gu-cred-meta {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   padding: 18px;
+   border-radius: 18px;
+   background: #ecedef;
+   text-align: left;
+}
+
+.gu-cred-meta dt {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 700;
+   letter-spacing: .06em;
+   text-transform: uppercase;
+   color: #4d5a53;
+   margin-bottom: 3px;
+}
+
+.gu-cred-meta dd {
+   font-family: var(--font-serif);
+   font-size: 15px;
+   color: #1d2b24;
+   word-break: break-word;
+}
+
+.gu-cred-meta dd.is-mono {
+   font-family: var(--gu-mono);
+   font-size: 13.5px;
+}
+
+.gu-cred-pass {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+}
+
+.gu-cred-pass output {
+   flex: 1;
+   min-width: 0;
+   padding: 12px 14px;
+   border-radius: 10px;
+   background: #fff;
+   font-family: var(--gu-mono);
+   font-size: 14px;
+   letter-spacing: .12em;
+   color: #1d2b24;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.gu-cred-pass button {
+   border: 0;
+   background: transparent;
+   color: var(--gu-green);
+   font-size: 20px;
+   cursor: pointer;
+   padding: 4px;
+}
+
+/* --- Checklist lateral --- */
+.gu-checklist {
+   padding: 20px;
+   border-radius: 18px;
+   background: var(--panel-bg);
+   box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+}
+
+.gu-checklist h4 {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   margin-bottom: 12px;
+   font-family: var(--font-serif);
+   font-size: 16px;
+   color: var(--text-primary);
+}
+
+.gu-checklist h4 i {
+   color: var(--gu-green);
+}
+
+.gu-checklist ul {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   list-style: none;
+}
+
+.gu-checklist li {
+   display: flex;
+   align-items: flex-start;
+   gap: 10px;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   color: var(--text-muted);
+}
+
+.gu-checklist li i {
+   margin-top: 2px;
+   color: #b6c4bd;
+}
+
+.gu-checklist li.is-ok i {
+   color: var(--gu-green);
+}
+
+.gu-checklist li.is-ok {
+   color: var(--text-primary);
+}
+
+/* =========================================================================
+   LISTADO DE USUARIOS
+   ========================================================================= */
+
+.gu-toolbar {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 12px;
+   padding: 16px;
+   border-radius: 16px;
+   background: var(--panel-bg);
+   box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+}
+
+.gu-search {
+   position: relative;
+   flex: 1 1 280px;
+   min-width: 0;
+}
+
+.gu-search i {
+   position: absolute;
+   left: 16px;
+   top: 50%;
+   transform: translateY(-50%);
+   color: #1a4231;
+   font-size: 15px;
+}
+
+.gu-search input {
+   width: 100%;
+   height: 46px;
+   padding: 0 16px 0 42px;
+   border: 1px solid rgba(0, 0, 0, .05);
+   border-radius: 14px;
+   outline: 0;
+   background: #D1E5DE;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 600;
+   color: #1a4231;
+}
+
+.gu-search input::placeholder {
+   color: #1a4231;
+   opacity: .55;
+   font-weight: 400;
+}
+
+.gu-search input:focus {
+   box-shadow: 0 0 0 2px #1a4231;
+}
+
+.gu-toolbar .gu-control,
+.gu-toolbar .cp-input-wrap {
+   height: 46px;
+   flex: 0 1 200px;
+}
+
+.gu-ghost-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   height: 46px;
+   padding: 0 16px;
+   border: 1px solid #a3c2b5;
+   border-radius: 14px;
+   background: transparent;
+   color: var(--text-primary);
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   cursor: pointer;
+   transition: background .2s ease;
+}
+
+.gu-ghost-btn:hover {
+   background: rgba(221, 163, 38, .14);
+}
+
+/* --- Barra de acciones en lote --- */
+.gu-bulk {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 16px;
+   flex-wrap: wrap;
+   padding: 14px 20px;
+   border-radius: 16px;
+   background: linear-gradient(95deg, #1f503c, #2a7253);
+   color: #fff;
+   box-shadow: 0 6px 16px rgba(16, 51, 35, .2);
+}
+
+.gu-bulk[hidden] {
+   display: none;
+}
+
+.gu-bulk-info {
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   font-family: var(--font-serif);
+   font-size: 16px;
+   font-weight: 700;
+}
+
+.gu-bulk-actions {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+   flex-wrap: wrap;
+}
+
+.gu-bulk-actions button {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   padding: 9px 14px;
+   border: 0;
+   border-radius: 10px;
+   background: rgba(255, 255, 255, .16);
+   color: #fff;
+   font-family: var(--font-serif);
+   font-size: 14px;
+   font-weight: 700;
+   cursor: pointer;
+   transition: background .2s ease;
+}
+
+.gu-bulk-actions button:hover {
+   background: rgba(255, 255, 255, .28);
+}
+
+.gu-bulk-actions button[data-bulk="eliminar"] {
+   background: #b93232;
+}
+
+.gu-bulk-actions button[data-bulk="eliminar"]:hover {
+   background: #9c2727;
+}
+
+/* --- Tabla --- */
+.gu-table-panel {
+   border-radius: 16px;
+   background: var(--panel-bg);
+   box-shadow: 0 4px 10px rgba(0, 0, 0, .05);
+   overflow: hidden;
+}
+
+.gu-table-scroll {
+   overflow-x: auto;
+   overflow-y: auto;
+   max-height: 560px;
+   scrollbar-width: thin;
+   scrollbar-color: #1a4231 #e3efe5;
+}
+
+.gu-table-scroll::-webkit-scrollbar {
+   width: 6px;
+   height: 6px;
+}
+
+.gu-table-scroll::-webkit-scrollbar-track {
+   background: #e3efe5;
+}
+
+.gu-table-scroll::-webkit-scrollbar-thumb {
+   background: #1a4231;
+   border-radius: 4px;
+}
+
+.gu-table {
+   width: 100%;
+   min-width: 940px;
+   border-collapse: collapse;
+   font-family: var(--font-serif);
+   font-size: 15px;
+}
+
+.gu-table thead th {
+   position: sticky;
+   top: 0;
+   z-index: 1;
+   padding: 14px;
+   border-bottom: 2px solid #1a2e24;
+   background: var(--panel-bg);
+   text-align: left;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 700;
+   letter-spacing: .04em;
+   color: var(--text-muted);
+   white-space: nowrap;
+}
+
+.gu-table td {
+   padding: 14px;
+   border-bottom: 1px solid rgba(0, 0, 0, .07);
+   color: var(--text-primary);
+   vertical-align: middle;
+}
+
+.gu-table tbody tr:last-child td {
+   border-bottom: 0;
+}
+
+.gu-table tbody tr:hover {
+   background: #f0f7f3;
+}
+
+.gu-col-check {
+   width: 48px;
+   text-align: center;
+}
+
+.gu-col-check input {
+   width: 17px;
+   height: 17px;
+   accent-color: #1a4231;
+   cursor: pointer;
+}
+
+.gu-col-actions {
+   text-align: right;
+}
+
+.gu-user-cell {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   min-width: 0;
+}
+
+.gu-avatar {
+   display: grid;
+   place-items: center;
+   width: 40px;
+   height: 40px;
+   flex-shrink: 0;
+   border-radius: 50%;
+   background: #b3cbbc;
+   color: #1a4231;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+}
+
+.gu-user-cell div {
+   display: flex;
+   flex-direction: column;
+   min-width: 0;
+}
+
+.gu-user-cell strong {
+   font-size: 15px;
+   color: var(--text-primary);
+}
+
+.gu-user-cell small {
+   font-family: var(--gu-mono);
+   font-size: 12px;
+   color: var(--text-muted);
+   overflow: hidden;
+   text-overflow: ellipsis;
+}
+
+.gu-doc {
+   font-family: var(--gu-mono);
+   font-size: 13px;
+   white-space: nowrap;
+}
+
+.gu-pill {
+   display: inline-flex;
+   align-items: center;
+   gap: 7px;
+   padding: 6px 13px;
+   border-radius: 999px;
+   background: var(--gu-green-soft);
+   color: #1a4231;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 700;
+   white-space: nowrap;
+}
+
+.gu-pill--tutor {
+   background: #dfeaf6;
+   color: #1d4a72;
+}
+
+.gu-pill--asesor {
+   background: #f4e7cd;
+   color: #7a5408;
+}
+
+.gu-pill--director {
+   background: #e7e1f3;
+   color: #4b2f76;
+}
+
+.gu-dep strong {
+   display: block;
+   font-size: 14.5px;
+}
+
+.gu-dep small {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   color: var(--text-muted);
+}
+
+.gu-state {
+   display: inline-flex;
+   align-items: center;
+   gap: 7px;
+   padding: 5px 12px;
+   border-radius: 999px;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12px;
+   font-weight: 600;
+   white-space: nowrap;
+   background: #dff0e7;
+   color: #14503b;
+}
+
+.gu-state::before {
+   content: '';
+   width: 7px;
+   height: 7px;
+   border-radius: 50%;
+   background: currentColor;
+}
+
+.gu-state--pendiente {
+   background: #f7ecd4;
+   color: #7a5408;
+}
+
+.gu-state--inactivo {
+   background: #e8e8e8;
+   color: #5a5a5a;
+}
+
+.gu-last {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 12.5px;
+   color: var(--text-muted);
+   white-space: nowrap;
+}
+
+/* -------------------------------------------------------------------------
+   TARJETAS DE USUARIO — diseño de listado (imagen de referencia)
+   Tarjeta clara con Rol / Nombre / Correo a la izquierda, Estado + menú
+   "···" (Perfil, Modificar, Eliminar) a la derecha. Es la única vista de
+   listado (se usa en cualquier tamaño de pantalla).
+   ------------------------------------------------------------------------- */
+.gu-cards {
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   padding: 18px;
+}
+
+.gu-user-card {
+   position: relative;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 18px;
+   padding: 18px 20px;
+   border-radius: 14px;
+   background: #fff;
+   box-shadow: 0 3px 10px rgba(16, 51, 35, .07);
+   transition: box-shadow .18s ease, transform .18s ease;
+}
+
+.gu-user-card:hover {
+   box-shadow: 0 8px 20px rgba(16, 51, 35, .12);
+}
+
+.gu-user-card-main {
+   display: flex;
+   flex-direction: column;
+   gap: 3px;
+   min-width: 0;
+}
+
+.gu-user-card-role {
+   font-family: var(--font-serif);
+   font-size: 19px;
+   font-weight: 700;
+   color: var(--gu-green-dark);
+}
+
+.gu-user-card-name {
+   font-family: var(--font-serif);
+   font-size: 16px;
+   font-weight: 700;
+   color: var(--text-primary);
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.gu-user-card-email {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13.5px;
+   color: var(--text-muted);
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.gu-user-card-side {
+   display: flex;
+   align-items: center;
+   gap: 22px;
+   flex-shrink: 0;
+}
+
+.gu-user-card-estado {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-end;
+   gap: 4px;
+   font-family: var(--font-serif);
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--text-primary);
+   white-space: nowrap;
+}
+
+.gu-user-card-estado .gu-state {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+}
+
+/* --- Menú "···" (Perfil / Modificar / Eliminar) --- */
+.gu-menu {
+   position: relative;
+}
+
+.gu-menu-trigger {
+   display: grid;
+   place-items: center;
+   width: 40px;
+   height: 40px;
+   border: 0;
+   border-radius: 50%;
+   background: var(--gu-green);
+   color: #fff;
+   font-size: 17px;
+   cursor: pointer;
+   transition: background .18s ease, transform .18s ease;
+}
+
+.gu-menu-trigger:hover {
+   background: var(--gu-green-dark);
+}
+
+.gu-menu.is-open .gu-menu-trigger {
+   background: var(--gu-green-dark);
+}
+
+.gu-menu-list {
+   position: absolute;
+   top: calc(100% + 8px);
+   right: 0;
+   z-index: 20;
+   display: none;
+   flex-direction: column;
+   min-width: 190px;
+   padding: 6px;
+   border-radius: 12px;
+   background: #fff;
+   box-shadow: 0 14px 30px rgba(16, 51, 35, .22);
+   overflow: hidden;
+}
+
+.gu-menu.is-open .gu-menu-list {
+   display: flex;
+}
+
+.gu-menu-list button {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 14px;
+   padding: 11px 14px;
+   border: 0;
+   border-radius: 8px;
+   background: transparent;
+   color: var(--text-primary);
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   text-align: left;
+   cursor: pointer;
+   transition: background .15s ease;
+}
+
+.gu-menu-list button i {
+   color: var(--gu-green);
+   font-size: 14px;
+}
+
+.gu-menu-list button:hover,
+.gu-menu-list button:first-child {
+   background: var(--gu-green-soft);
+}
+
+.gu-menu-list button:hover {
+   background: #cfe7db;
+}
+
+.gu-menu-list button[data-act="eliminar"] i {
+   color: #b93232;
+}
+
+.gu-menu-list button[data-act="eliminar"]:hover {
+   background: rgba(185, 50, 50, .1);
+}
+
+/* --- Vacío y paginación --- */
+.gu-empty {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 10px;
+   padding: 48px 20px;
+   text-align: center;
+}
+
+.gu-empty i {
+   font-size: 34px;
+   color: #b6c4bd;
+}
+
+.gu-empty strong {
+   font-family: var(--font-serif);
+   font-size: 18px;
+   color: var(--text-primary);
+}
+
+.gu-empty span {
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   color: var(--text-muted);
+}
+
+.gu-pagination {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   gap: 16px;
+   flex-wrap: wrap;
+   padding: 16px 20px;
+   border-top: 1px solid rgba(0, 0, 0, .07);
+}
+
+.gu-pagination-info {
+   display: flex;
+   align-items: center;
+   gap: 14px;
+   flex-wrap: wrap;
+   font-family: var(--font-sans, 'Inter', sans-serif);
+   font-size: 13px;
+   color: var(--text-muted);
+}
+
+.gu-pagination-info b {
+   color: var(--text-primary);
+}
+
+.gu-rows {
+   display: flex;
+   align-items: center;
+   gap: 8px;
+}
+
+.gu-rows select {
+   height: 34px;
+   padding: 0 8px;
+   border: 1px solid #a3c2b5;
+   border-radius: 8px;
+   background: #D1E5DE;
+   font-family: var(--font-serif);
+   font-size: 14px;
+   color: #1a4231;
+   cursor: pointer;
+}
+
+.gu-pages {
+   display: flex;
+   align-items: center;
+   gap: 6px;
+}
+
+.gu-pages button {
+   display: grid;
+   place-items: center;
+   min-width: 34px;
+   height: 34px;
+   padding: 0 8px;
+   border: 0;
+   border-radius: 9px;
+   background: transparent;
+   color: var(--text-primary);
+   font-family: var(--font-serif);
+   font-size: 14px;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.gu-pages button:hover:not(:disabled) {
+   background: var(--gu-green-soft);
+}
+
+.gu-pages button.is-current {
+   background: #1a4231;
+   color: #fff;
+}
+
+.gu-pages button:disabled {
+   color: #b6c4bd;
+   cursor: not-allowed;
+}
+
+/* =========================================================================
+   MODALES DEL MÓDULO (usan .modal-overlay de director.css)
+   ========================================================================= */
+
+.gu-modal-card {
+   width: min(380px, 92vw);
+   background: transparent;
+   box-shadow: none;
+}
+
+.gu-modal-card .gu-cred {
+   box-shadow: 0 18px 40px rgba(0, 0, 0, .3);
+}
+
+.gu-modal-close {
+   display: block;
+   margin: 16px auto 0;
+   padding: 10px 26px;
+   border: 0;
+   border-radius: 10px;
+   background: #fff;
+   color: #1a4231;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+/* --- Modal "Perfil" (filas Nombre/Correo/Estado/...) --- */
+.gu-perfil-card {
+   width: min(430px, 92vw);
+   border-radius: 20px;
+   overflow: hidden;
+   background: #fff;
+   box-shadow: 0 18px 40px rgba(0, 0, 0, .3);
+}
+
+.gu-perfil-head {
+   padding: 20px 26px;
+   background: linear-gradient(118deg, #2b8563 0%, #123a27 68%, #102e20 100%);
+}
+
+.gu-perfil-head h3 {
+   margin: 0;
+   font-family: var(--font-serif);
+   font-size: 21px;
+   font-weight: 700;
+   color: var(--clr-accent-gold);
+}
+
+.gu-perfil-body {
+   display: flex;
+   flex-direction: column;
+   gap: 14px;
+   padding: 24px 26px 8px;
+}
+
+.gu-perfil-body .gu-perfil-row {
+   display: flex;
+   align-items: baseline;
+   gap: 10px;
+   font-family: var(--font-serif);
+}
+
+.gu-perfil-body dt {
+   flex-shrink: 0;
+   min-width: 108px;
+   font-size: 16px;
+   font-weight: 700;
+   color: #103322;
+}
+
+.gu-perfil-body dd {
+   font-size: 15px;
+   font-weight: 500;
+   color: #2c332f;
+   overflow-wrap: anywhere;
+}
+
+.gu-perfil-body dd.gu-perfil-pass {
+   display: inline-flex;
+   align-items: center;
+   gap: 10px;
+   padding: 6px 14px;
+   border-radius: 8px;
+   background: #3a3f3d;
+   color: #fff;
+   font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+   font-size: 13.5px;
+}
+
+.gu-perfil-body dd.gu-perfil-pass button {
+   border: 0;
+   background: transparent;
+   color: #cfe7db;
+   cursor: pointer;
+   font-size: 13px;
+}
+
+.gu-perfil-actions {
+   display: flex;
+   justify-content: flex-end;
+   gap: 12px;
+   padding: 18px 26px 24px;
+}
+
+.gu-perfil-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   padding: 11px 20px;
+   border: 0;
+   border-radius: 10px;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   cursor: pointer;
+   transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.gu-perfil-btn:hover {
+   transform: translateY(-1px);
+}
+
+.gu-perfil-btn--ghost {
+   background: #103322;
+   color: #fff;
+}
+
+.gu-perfil-btn--solid {
+   background: linear-gradient(95deg, #8ad7b8, #45a47e);
+   color: #103322;
+   box-shadow: 0 4px 10px rgba(16, 51, 35, .2);
+}
+
+.gu-confirm .modal-body p {
+   max-width: 40ch;
+}
+
+.gu-confirm .gu-confirm-actions {
+   display: flex;
+   gap: 12px;
+   margin-top: 6px;
+}
+
+.gu-confirm .gu-confirm-actions button {
+   padding: 10px 24px;
+   border: 0;
+   border-radius: 8px;
+   font-family: var(--font-serif);
+   font-size: 15px;
+   font-weight: 700;
+   cursor: pointer;
+}
+
+.gu-confirm-no {
+   background: #D1E5DE;
+   color: #1a4231;
+}
+
+.gu-confirm-si {
+   background: #b93232;
+   color: #fff;
+}
+
+.gu-modal-body-icon--danger i {
+   color: #b93232 !important;
+}
+
+/* =========================================================================
+   MODO OSCURO — sigue la convención del proyecto (paneles #D1E5DE)
+   ========================================================================= */
+
+body.dark-theme #gestionar-usuarios .gu-header h2 {
+   color: #fff;
+}
+
+body.dark-theme #gestionar-usuarios .gu-header p {
+   color: #cdd9d4;
+}
+
+body.dark-theme #gestionar-usuarios .gu-count-pill {
+   background: #D1E5DE;
+   color: #1a2e24;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-dot {
+   background: #D1E5DE;
+   border-color: #9ec0b4;
+   color: #1a4231;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-item.is-current .gu-step-dot {
+   background: linear-gradient(135deg, #288360, #103322);
+   color: #fff;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-text strong {
+   color: #fff;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-text small {
+   color: #cdd9d4;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-bar {
+   background: #3c4e46;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-head h3,
+body.dark-theme #gestionar-usuarios .gu-field label,
+body.dark-theme #gestionar-usuarios .gu-role-box strong,
+body.dark-theme #gestionar-usuarios .gu-status-copy strong,
+body.dark-theme #gestionar-usuarios .gu-check strong,
+body.dark-theme #gestionar-usuarios .gu-summary dd,
+body.dark-theme #gestionar-usuarios .gu-checklist h4 {
+   color: #1a1a1a;
+}
+
+body.dark-theme #gestionar-usuarios .gu-step-head p,
+body.dark-theme #gestionar-usuarios .gu-role-box strong+span,
+body.dark-theme #gestionar-usuarios .gu-status-copy span,
+body.dark-theme #gestionar-usuarios .gu-check strong+span,
+body.dark-theme #gestionar-usuarios .gu-summary dt,
+body.dark-theme #gestionar-usuarios .gu-hint {
+   color: #4a544d;
+}
+
+body.dark-theme #gestionar-usuarios .gu-control,
+body.dark-theme #gestionar-usuarios .gu-search input {
+   background: #9ec0b4;
+   border-color: rgba(0, 0, 0, .1);
+}
+
+body.dark-theme #gestionar-usuarios .gu-role-box,
+body.dark-theme #gestionar-usuarios .gu-status-row,
+body.dark-theme #gestionar-usuarios .gu-summary div,
+body.dark-theme #gestionar-usuarios .gu-user-card {
+   background: #bcd6cb;
+}
+
+body.dark-theme #gestionar-usuarios .gu-role input:checked+.gu-role-box {
+   background: #9ec0b4;
+   border-color: #1a4231;
+}
+
+body.dark-theme #gestionar-usuarios .gu-toolbar,
+body.dark-theme #gestionar-usuarios .gu-table-panel,
+body.dark-theme #gestionar-usuarios .gu-checklist {
+   background: #D1E5DE;
+}
+
+body.dark-theme #gestionar-usuarios .gu-user-card-role {
+   color: #0d2a1c;
+}
+
+body.dark-theme #gestionar-usuarios .gu-user-card-name {
+   color: #1a1a1a;
+}
+
+body.dark-theme #gestionar-usuarios .gu-user-card-email,
+body.dark-theme #gestionar-usuarios .gu-user-card-estado {
+   color: #3a4e44;
+}
+
+body.dark-theme #gestionar-usuarios .gu-perfil-body dd {
+   color: #2c332f;
+}
+
+body.dark-theme #gestionar-usuarios .gu-table thead th {
+   background: #D1E5DE;
+   color: #3a4e44;
+}
+
+body.dark-theme #gestionar-usuarios .gu-table td,
+body.dark-theme #gestionar-usuarios .gu-user-cell strong,
+body.dark-theme #gestionar-usuarios .gu-dep strong,
+body.dark-theme #gestionar-usuarios .gu-empty strong,
+body.dark-theme #gestionar-usuarios .gu-pages button {
+   color: #1a1a1a;
+}
+
+body.dark-theme #gestionar-usuarios .gu-table tbody tr:hover {
+   background: #b8d6cc;
+}
+
+body.dark-theme #gestionar-usuarios .gu-user-cell small,
+body.dark-theme #gestionar-usuarios .gu-dep small,
+body.dark-theme #gestionar-usuarios .gu-last,
+body.dark-theme #gestionar-usuarios .gu-pagination-info,
+body.dark-theme #gestionar-usuarios .gu-checklist li {
+   color: #4a544d;
+}
+
+body.dark-theme #gestionar-usuarios .gu-ghost-btn {
+   color: #1a1a1a;
+   border-color: #7b9f91;
+}
+
+body.dark-theme #gestionar-usuarios .gu-switch {
+   background: #a9c8bb;
+}
+
+body.dark-theme #gestionar-usuarios .gu-strength-bars span {
+   background: #a9c8bb;
+}
+
+/* =========================================================================
+   RESPONSIVE — mismos cortes que shell.css / director.css
+   ========================================================================= */
+
+@media (max-width: 1240px) {
+   .gu-wizard-layout {
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 22px;
+   }
+}
+
+@media (min-width: 901px) and (max-height: 800px) and (min-height: 501px) {
+   .gu-header h2 {
+      font-size: 22px;
+   }
+
+   .gu-header p {
+      font-size: 14px;
+   }
+
+   .gu-steps {
+      margin-bottom: 18px;
+   }
+
+   .gu-step-dot {
+      width: 34px;
+      height: 34px;
+      font-size: 15px;
+   }
+
+   .gu-control {
+      height: 44px;
+   }
+
+   .gu-cred-body {
+      padding: 14px 18px 18px;
+   }
+
+   .gu-cred-name {
+      font-size: 20px;
+   }
+}
+
+/* Tabletas en vertical y drawer móvil */
+@media (max-width: 1024px) {
+   .gu-wizard-layout {
+      grid-template-columns: 1fr;
+   }
+
+   .gu-preview {
+      position: static;
+      max-width: 420px;
+      width: 100%;
+      margin: 0 auto;
+   }
+}
+
+@media (max-width: 900px),
+(max-height: 500px) {
+   .gu-pagination {
+      justify-content: center;
+   }
+
+   .gu-toolbar .gu-control,
+   .gu-toolbar .cp-input-wrap {
+      flex: 1 1 160px;
+   }
+}
+
+@media (max-width: 560px) {
+   .gu-user-card {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+   }
+
+   .gu-user-card-side {
+      align-items: center;
+      justify-content: space-between;
+   }
+
+   .gu-user-card-estado {
+      align-items: flex-start;
+   }
+}
+
+@media (max-width: 768px) {
+
+   .gu-grid,
+   .gu-roles,
+   .gu-summary {
+      grid-template-columns: 1fr;
+   }
+
+   .gu-header h2 {
+      font-size: 23px;
+   }
+
+   .gu-step-text {
+      display: none;
+   }
+
+   .gu-step-item {
+      gap: 0;
+   }
+
+   .gu-status-row {
+      flex-direction: column;
+      align-items: stretch;
+   }
+
+   .gu-switch {
+      justify-content: space-between;
+   }
+
+   .gu-switch button {
+      flex: 1;
+      padding: 9px 6px;
+      font-size: 13px;
+   }
+
+   .gu-header h1 {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+   }
+
+   .gu-toolbar {
+      flex-direction: column;
+      align-items: stretch;
+   }
+
+   .gu-toolbar .cp-input-wrap, .gu-toolbar .gu-search, .gu-toolbar button {
+      flex: 1 1 auto;
+      width: 100%;
+   }
+}
+
+@media (max-width: 600px) {
+   .gu-wizard-actions {
+      flex-wrap: wrap;
+   }
+
+   .gu-wizard-actions .gu-progress-text {
+      width: 100%;
+      margin: 0 0 4px;
+   }
+
+   .gu-wizard-actions .cp-btn {
+      flex: 1;
+      padding: 0 16px;
+   }
+
+   .gu-bulk {
+      flex-direction: column;
+      align-items: flex-start;
+   }
+
+   .gu-cred-top {
+      padding: 18px 18px 42px;
+   }
+
+   .gu-cred-name {
+      font-size: 20px;
+   }
+}
+
+@media (max-width: 430px) {
+   .gu-cred-brand p {
+      font-size: 12.5px;
+   }
+
+   .gu-cred-state {
+      padding: 6px 12px;
+      font-size: 11px;
+   }
+
+   .gu-cred-cta {
+      font-size: 15px;
+      padding: 11px 20px;
+   }
+
+   .gu-checklist,
+   .gu-toolbar {
+      padding: 14px;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   #gestionar-usuarios * {
+      transition: none !important;
+   }
+}
+
+/* Eliminar cintillo azul en móviles para las opciones de rol */
+.gu-role, .gu-role * {
+    -webkit-tap-highlight-color: transparent !important;
+}
